@@ -22,15 +22,32 @@ def simulate_strategy(strategy, ticker, current_price, historical_data, account_
 # Overlap Studies  
   
 def BBANDS_indicator(ticker, data):  
-   """Bollinger Bands (BBANDS) indicator."""  
+   """Bollinger Bands (BBANDS) indicator with optimized parameters."""  
       
-   upper, middle, lower = ta.BBANDS(data['Close'], timeperiod=20)  
-   if data['Close'].iloc[-1] > upper.iloc[-1]:  
-      return 'Sell'  
-   elif data['Close'].iloc[-1] < lower.iloc[-1]:  
-      return 'Buy'  
-   else:  
-      return 'Hold'  
+   # Calculate BBands with optimized parameters
+   upper, middle, lower = ta.BBANDS(
+      data['Close'], 
+      timeperiod=15,     # Shorter period for more signals
+      nbdevup=1.8,       # Tighter bands
+      nbdevdn=1.8,
+      matype=1           # Use EMA instead of SMA
+   )
+   
+   current_price = data['Close'].iloc[-1]
+   current_upper = upper.iloc[-1]
+   current_middle = middle.iloc[-1]
+   current_lower = lower.iloc[-1]
+   
+   # Use middle band for trend direction
+   trend_up = current_price > current_middle
+   
+   # Generate signals based on price position and trend
+   if current_price > current_upper and not trend_up:
+      return 'Sell'
+   elif current_price < current_lower and trend_up:
+      return 'Buy'
+   else:
+      return 'Hold'
   
 def DEMA_indicator(ticker, data):  
    """Double Exponential Moving Average (DEMA) indicator."""  
@@ -518,9 +535,9 @@ def RSI_indicator(ticker, data):
    """Relative Strength Index (RSI) indicator."""  
       
    rsi = ta.RSI(data['Close'], timeperiod=14)  
-   if rsi.iloc[-1] > 70:  
+   if rsi.iloc[-1] > 65:  
       return 'Sell'  
-   elif rsi.iloc[-1] < 30:  
+   elif rsi.iloc[-1] < 35:  
       return 'Buy'  
    else:  
       return 'Hold'  

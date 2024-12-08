@@ -12,9 +12,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 class Backtester:
-    def __init__(self, initial_capital=50000, min_cash_buffer=15000):
+    def __init__(self, initial_capital=50000, min_cash_buffer=15000, max_position_pct=0.1):
         self.initial_capital = initial_capital
         self.min_cash_buffer = min_cash_buffer
+        self.max_position_pct = max_position_pct
         self.reset()
     
     def reset(self):
@@ -87,6 +88,7 @@ class Backtester:
         print(f"Minute data points: {len(minute_backtest)}")
         
         return daily_backtest, minute_backtest, backtest_start, end_date
+
     def calculate_points(self, price_change_ratio):
         """Calculate points based on price change ratio"""
         if price_change_ratio > 1:  # Profitable trade
@@ -107,7 +109,7 @@ class Backtester:
     
     def execute_buy(self, timestamp, price):
         """Execute buy order if conditions met"""
-        max_position_value = self.capital * 0.1  # 10% max position size
+        max_position_value = self.capital * self.max_position_pct  # Use configurable position size
         shares = int(max_position_value / price)
         position_cost = shares * price
         
@@ -191,6 +193,7 @@ class Backtester:
             print(f"\nBacktesting {symbol} with {strategy_func.__name__}")
             print(f"Period: {start_date} to {end_date}")
             print(f"Daily data points: {len(daily_backtest)}")
+            print(f"Max position size: {self.max_position_pct*100}% of capital")
             
             # Group minute data by trading day
             daily_groups = minute_backtest.groupby(minute_backtest.index.date)

@@ -1,14 +1,52 @@
-from strategies.talib_indicators import KAMA_indicator as strategy
+from strategies.talib_indicators import TRIMA_indicator as strategy
 from backtester import Backtester
 import logging
 import json
+from multiprocessing import Pool, cpu_count, Lock, current_process
+from functools import partial
+import pandas as pd
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format='%(asctime)s - %(processName)s - %(levelname)s - %(message)s',
     datefmt='%Y-%m-%d %H:%M:%S'
 )
 logger = logging.getLogger(__name__)
+
+def process_symbol(symbol, strategy_name):
+    """Process a single symbol - this will run in its own process"""
+    try:
+        backtester = Backtester()
+        result = backtester.run(symbol, strategy)
+        
+        # Count minute decisions
+        minute_decisions = 0
+        daily_data, minute_data = backtester.load_data(symbol)
+        daily_backtest, minute_backtest, start_date, end_date = backtester.prepare_data(daily_data, minute_data, strategy)
+        daily_groups = minute_backtest.groupby(minute_backtest.index.date)
+        for day, day_data in daily_groups:
+            minute_decisions += len(day_data)
+            
+        # Add minute decisions and symbol to result
+        result['minute_decisions'] = minute_decisions
+        result['symbol'] = symbol
+        
+        # Print symbol results
+        print(f"\n{strategy_name} Analysis for {symbol}:")
+        print(f"Total Trades: {result['trades']}")
+        print(f"Total Minute Decisions: {minute_decisions}")
+        if result['trades'] > 0:
+            print(f"Win Rate: {(result['successful_trades']/result['trades']*100):.2f}%")
+        print(f"Points: {result['points']:.2f}")
+        print(f"Return: {result['total_return']:.2f}%")
+        if result['open_position']:
+            print("Has open position")
+            
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error processing {symbol}: {str(e)}")
+        return None
 
 def main():
     # Use all S&P 100 symbols
@@ -24,62 +62,34 @@ def main():
         'QCOM', 'RTX', 'SBUX', 'SCHW', 'SO', 'SPG', 'T', 'TGT', 'TMO', 'TMUS',
         'TSLA', 'TXN', 'UNH', 'UNP', 'UPS', 'USB', 'V', 'VZ', 'WBA', 'WFC',
         'WMT', 'XOM'
-    ][1:4]
-    backtester = Backtester()
+    ]#[1:4]
     
     strategy_name = strategy.__name__.replace('_indicator', '')
     print(f"\nTesting {strategy_name} Strategy")
     print("=" * 50)
     
-    results = []
-    total_points = 0
-    total_trades = 0
-    total_success = 0
-    total_failed = 0
-    total_minute_decisions = 0  # Add counter for total decisions
+    # Use multiprocessing to process symbols in parallel
+    num_processes = min(cpu_count() * 3, len(symbols))  # 3 workers per CPU core
+    print(f"Using {num_processes} processes ({3} per CPU core)")
     
-    for symbol in symbols:
-        try:
-            # Run backtest
-            result = backtester.run(symbol, strategy)
-            results.append({'symbol': symbol, **result})
-            
-            total_points += result['points']
-            total_trades += result['trades']
-            total_success += result['successful_trades']
-            total_failed += result['failed_trades']
-            
-            # Count minute decisions
-            minute_decisions = 0
-            daily_data, minute_data = backtester.load_data(symbol)
-            daily_backtest, minute_backtest, start_date, end_date = backtester.prepare_data(daily_data, minute_data, strategy)
-            daily_groups = minute_backtest.groupby(minute_backtest.index.date)
-            for day, day_data in daily_groups:
-                minute_decisions += len(day_data)
-            total_minute_decisions += minute_decisions
-            
-            # Print detailed analysis for this symbol
-            print(f"\n{strategy_name} Analysis for {symbol}:")
-            print(f"Total Trades: {result['trades']}")
-            print(f"Total Minute Decisions: {minute_decisions}")
-            if result['trades'] > 0:
-                print(f"Win Rate: {(result['successful_trades']/result['trades']*100):.1f}%")
-            print(f"Points: {result['points']:.2f}")
-            print(f"Return: {result['total_return']:.2f}%")
-            if result['open_position']:
-                print("Has open position")
-                
-        except Exception as e:
-            logger.error(f"Error processing {symbol}: {str(e)}")
-            continue
+    process_func = partial(process_symbol, strategy_name=strategy_name)
+    
+    with Pool(num_processes) as pool:
+        results = [r for r in pool.map(process_func, symbols) if r is not None]
     
     # Calculate overall metrics
     if results:
+        total_points = sum(r['points'] for r in results)
+        total_trades = sum(r['trades'] for r in results)
+        total_success = sum(r['successful_trades'] for r in results)
+        total_failed = sum(r['failed_trades'] for r in results)
+        total_minute_decisions = sum(r['minute_decisions'] for r in results)
+        
         avg_return = sum(r['total_return'] for r in results) / len(results)
         avg_points = total_points / len(results)
         win_rate = (total_success/total_trades*100) if total_trades > 0 else 0
         
-        # Save results
+        # Save results with rounded values
         try:
             with open('backtesting/strategy_scores.json', 'r') as f:
                 scores = json.load(f)
@@ -87,11 +97,11 @@ def main():
             scores = {}
             
         scores[f'{strategy_name}_indicator'] = {
-            'total_points': total_points,
-            'average_points': avg_points,
-            'win_rate': win_rate,
+            'total_points': round(total_points, 2),
+            'average_points': round(avg_points, 2),
+            'win_rate': round(win_rate, 2),
             'total_trades': total_trades,
-            'average_return': avg_return,
+            'average_return': round(avg_return, 2),
             'total_minute_decisions': total_minute_decisions
         }
         
@@ -114,9 +124,10 @@ def main():
         print(f"Total Points: {total_points:.2f}")
         print(f"Average Points per Stock: {avg_points:.2f}")
         print(f"Total Trades: {total_trades}")
-        print(f"Win Rate: {win_rate:.1f}% ({total_success}/{total_trades})")
+        print(f"Win Rate: {win_rate:.2f}% ({total_success}/{total_trades})")
         print(f"Average Return: {avg_return:.2f}%")
         print(f"Total Minute Decisions: {total_minute_decisions}")
+        print(f"Processes used: {num_processes} (3 per CPU core)")
     else:
         print("\nNo valid results to display")
 
