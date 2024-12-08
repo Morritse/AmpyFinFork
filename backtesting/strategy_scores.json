@@ -1,0 +1,59 @@
+{
+    "RSI_indicator": {
+        "total_points": 7.0,
+        "average_points": 0.07,
+        "win_rate": 53.0,
+        "total_trades": 1000,
+        "average_return": 0.5
+    },
+    "ADOSC_indicator": {
+        "total_points": 172.91,
+        "average_points": 1.76,
+        "win_rate": 53.7,
+        "total_trades": 3057,
+        "average_return": 0.69
+    },
+    "DEMA_indicator": {
+        "total_points": 948.54,
+        "average_points": 9.68,
+        "win_rate": 88.8,
+        "total_trades": 534,
+        "average_return": 1.91
+    },
+    "BBANDS_indicator": {
+        "total_points": 20.29,
+        "average_points": 0.21,
+        "win_rate": 58.3,
+        "total_trades": 115,
+        "average_return": -0.21
+    },
+    "MACD_indicator": {
+        "total_points": 522.85,
+        "average_points": 5.34,
+        "win_rate": 67.11,
+        "total_trades": 529,
+        "average_return": 1.86
+    },
+    "EMA_indicator": {
+        "total_points": 1195.12,
+        "average_points": 12.2,
+        "win_rate": 89.14,
+        "total_trades": 654,
+        "average_return": 3.02
+    },
+    "MA_indicator": {
+        "total_points": 1113.39,
+        "average_points": 11.36,
+        "win_rate": 88.4,
+        "total_trades": 603,
+        "average_return": 2.77
+    },
+    "KAMA_indicator": {
+        "total_points": 33.36,
+        "average_points": 11.12,
+        "win_rate": 90.47619047619048,
+        "total_trades": 21,
+        "average_return": 2.175811400000005,
+        "total_minute_decisions": 151950
+    }
+}

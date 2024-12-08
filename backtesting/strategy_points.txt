@@ -1,0 +1,499 @@
+
+ADOSC Strategy - AAPL
+Points: 14.14
+Trades: 33
+Win Rate: 60.6% (20/33)
+--------------------------------------------------
+ADOSC Strategy - ABBV
+Points: -8.69
+Trades: 26
+Win Rate: 42.3% (11/26)
+--------------------------------------------------
+ADOSC Strategy - ABT
+Points: 6.82
+Trades: 27
+Win Rate: 59.3% (16/27)
+--------------------------------------------------
+ADOSC Strategy - ACN
+Points: -7.93
+Trades: 29
+Win Rate: 44.8% (13/29)
+--------------------------------------------------
+ADOSC Strategy - ADBE
+Points: -5.46
+Trades: 30
+Win Rate: 50.0% (15/30)
+--------------------------------------------------
+ADOSC Strategy - AIG
+Points: 1.46
+Trades: 28
+Win Rate: 53.6% (15/28)
+--------------------------------------------------
+ADOSC Strategy - AMD
+Points: 15.04
+Trades: 34
+Win Rate: 64.7% (22/34)
+--------------------------------------------------
+ADOSC Strategy - AMGN
+Points: -19.00
+Trades: 32
+Win Rate: 34.4% (11/32)
+--------------------------------------------------
+ADOSC Strategy - AMT
+Points: 1.31
+Trades: 29
+Win Rate: 58.6% (17/29)
+--------------------------------------------------
+ADOSC Strategy - AMZN
+Points: -0.26
+Trades: 32
+Win Rate: 46.9% (15/32)
+--------------------------------------------------
+ADOSC Strategy - AXP
+Points: -1.13
+Trades: 34
+Win Rate: 50.0% (17/34)
+--------------------------------------------------
+ADOSC Strategy - BA
+Points: -5.88
+Trades: 31
+Win Rate: 48.4% (15/31)
+--------------------------------------------------
+ADOSC Strategy - BAC
+Points: 3.40
+Trades: 27
+Win Rate: 55.6% (15/27)
+--------------------------------------------------
+ADOSC Strategy - BK
+Points: 12.26
+Trades: 31
+Win Rate: 64.5% (20/31)
+--------------------------------------------------
+ADOSC Strategy - BKNG
+Points: 12.15
+Trades: 33
+Win Rate: 54.5% (18/33)
+--------------------------------------------------
+ADOSC Strategy - BLK
+Points: 12.99
+Trades: 32
+Win Rate: 62.5% (20/32)
+--------------------------------------------------
+ADOSC Strategy - BMY
+Points: 10.89
+Trades: 30
+Win Rate: 60.0% (18/30)
+--------------------------------------------------
+ADOSC Strategy - C
+Points: 2.17
+Trades: 28
+Win Rate: 53.6% (15/28)
+--------------------------------------------------
+ADOSC Strategy - CAT
+Points: 2.07
+Trades: 30
+Win Rate: 53.3% (16/30)
+--------------------------------------------------
+ADOSC Strategy - CHTR
+Points: -4.25
+Trades: 33
+Win Rate: 48.5% (16/33)
+--------------------------------------------------
+ADOSC Strategy - CL
+Points: -10.75
+Trades: 33
+Win Rate: 42.4% (14/33)
+--------------------------------------------------
+ADOSC Strategy - CMCSA
+Points: -2.98
+Trades: 32
+Win Rate: 50.0% (16/32)
+--------------------------------------------------
+ADOSC Strategy - COF
+Points: 15.00
+Trades: 28
+Win Rate: 64.3% (18/28)
+--------------------------------------------------
+ADOSC Strategy - COP
+Points: -17.86
+Trades: 26
+Win Rate: 42.3% (11/26)
+--------------------------------------------------
+ADOSC Strategy - COST
+Points: 9.02
+Trades: 29
+Win Rate: 58.6% (17/29)
+--------------------------------------------------
+ADOSC Strategy - CRM
+Points: 10.74
+Trades: 29
+Win Rate: 62.1% (18/29)
+--------------------------------------------------
+ADOSC Strategy - CSCO
+Points: 21.63
+Trades: 31
+Win Rate: 67.7% (21/31)
+--------------------------------------------------
+ADOSC Strategy - CVS
+Points: -5.33
+Trades: 38
+Win Rate: 47.4% (18/38)
+--------------------------------------------------
+ADOSC Strategy - CVX
+Points: -9.84
+Trades: 32
+Win Rate: 40.6% (13/32)
+--------------------------------------------------
+ADOSC Strategy - DE
+Points: 0.74
+Trades: 33
+Win Rate: 51.5% (17/33)
+--------------------------------------------------
+ADOSC Strategy - DHR
+Points: -5.93
+Trades: 34
+Win Rate: 50.0% (17/34)
+--------------------------------------------------
+ADOSC Strategy - DIS
+Points: 15.16
+Trades: 31
+Win Rate: 61.3% (19/31)
+--------------------------------------------------
+ADOSC Strategy - DOW
+Points: -17.54
+Trades: 27
+Win Rate: 33.3% (9/27)
+--------------------------------------------------
+ADOSC Strategy - DUK
+Points: -3.35
+Trades: 37
+Win Rate: 51.4% (19/37)
+--------------------------------------------------
+ADOSC Strategy - EMR
+Points: -0.55
+Trades: 27
+Win Rate: 51.9% (14/27)
+--------------------------------------------------
+ADOSC Strategy - EXC
+Points: 1.14
+Trades: 36
+Win Rate: 52.8% (19/36)
+--------------------------------------------------
+ADOSC Strategy - F
+Points: 4.99
+Trades: 32
+Win Rate: 59.4% (19/32)
+--------------------------------------------------
+ADOSC Strategy - FDX
+Points: 8.78
+Trades: 31
+Win Rate: 58.1% (18/31)
+--------------------------------------------------
+ADOSC Strategy - GD
+Points: -0.51
+Trades: 32
+Win Rate: 50.0% (16/32)
+--------------------------------------------------
+ADOSC Strategy - GE
+Points: -16.83
+Trades: 26
+Win Rate: 38.5% (10/26)
+--------------------------------------------------
+ADOSC Strategy - GILD
+Points: 2.35
+Trades: 31
+Win Rate: 51.6% (16/31)
+--------------------------------------------------
+ADOSC Strategy - GM
+Points: -2.45
+Trades: 29
+Win Rate: 55.2% (16/29)
+--------------------------------------------------
+ADOSC Strategy - GOOGL
+Points: 2.15
+Trades: 31
+Win Rate: 54.8% (17/31)
+--------------------------------------------------
+ADOSC Strategy - GS
+Points: -9.95
+Trades: 32
+Win Rate: 43.8% (14/32)
+--------------------------------------------------
+ADOSC Strategy - HD
+Points: 6.61
+Trades: 35
+Win Rate: 60.0% (21/35)
+--------------------------------------------------
+ADOSC Strategy - HON
+Points: -6.46
+Trades: 33
+Win Rate: 48.5% (16/33)
+--------------------------------------------------
+ADOSC Strategy - IBM
+Points: 2.02
+Trades: 35
+Win Rate: 54.3% (19/35)
+--------------------------------------------------
+ADOSC Strategy - INTC
+Points: 7.47
+Trades: 30
+Win Rate: 60.0% (18/30)
+--------------------------------------------------
+ADOSC Strategy - JNJ
+Points: -1.35
+Trades: 33
+Win Rate: 54.5% (18/33)
+--------------------------------------------------
+ADOSC Strategy - JPM
+Points: 6.67
+Trades: 32
+Win Rate: 62.5% (20/32)
+--------------------------------------------------
+ADOSC Strategy - KHC
+Points: -8.40
+Trades: 33
+Win Rate: 45.5% (15/33)
+--------------------------------------------------
+ADOSC Strategy - KO
+Points: -9.92
+Trades: 32
+Win Rate: 40.6% (13/32)
+--------------------------------------------------
+ADOSC Strategy - LIN
+Points: 1.06
+Trades: 32
+Win Rate: 56.2% (18/32)
+--------------------------------------------------
+ADOSC Strategy - LLY
+Points: -5.21
+Trades: 37
+Win Rate: 51.4% (19/37)
+--------------------------------------------------
+ADOSC Strategy - LMT
+Points: -15.22
+Trades: 30
+Win Rate: 43.3% (13/30)
+--------------------------------------------------
+ADOSC Strategy - LOW
+Points: 9.70
+Trades: 30
+Win Rate: 66.7% (20/30)
+--------------------------------------------------
+ADOSC Strategy - MA
+Points: 10.90
+Trades: 29
+Win Rate: 62.1% (18/29)
+--------------------------------------------------
+ADOSC Strategy - MCD
+Points: 5.94
+Trades: 27
+Win Rate: 55.6% (15/27)
+--------------------------------------------------
+ADOSC Strategy - MDLZ
+Points: -11.39
+Trades: 34
+Win Rate: 41.2% (14/34)
+--------------------------------------------------
+ADOSC Strategy - MDT
+Points: -10.62
+Trades: 29
+Win Rate: 41.4% (12/29)
+--------------------------------------------------
+ADOSC Strategy - MET
+Points: -7.16
+Trades: 27
+Win Rate: 48.1% (13/27)
+--------------------------------------------------
+ADOSC Strategy - META
+Points: 6.41
+Trades: 28
+Win Rate: 57.1% (16/28)
+--------------------------------------------------
+ADOSC Strategy - MMM
+Points: -6.03
+Trades: 34
+Win Rate: 47.1% (16/34)
+--------------------------------------------------
+ADOSC Strategy - MO
+Points: 17.84
+Trades: 31
+Win Rate: 67.7% (21/31)
+--------------------------------------------------
+ADOSC Strategy - MRK
+Points: -18.52
+Trades: 30
+Win Rate: 36.7% (11/30)
+--------------------------------------------------
+ADOSC Strategy - MS
+Points: 10.27
+Trades: 30
+Win Rate: 63.3% (19/30)
+--------------------------------------------------
+ADOSC Strategy - MSFT
+Points: 8.74
+Trades: 30
+Win Rate: 56.7% (17/30)
+--------------------------------------------------
+ADOSC Strategy - NEE
+Points: -6.16
+Trades: 37
+Win Rate: 51.4% (19/37)
+--------------------------------------------------
+ADOSC Strategy - NFLX
+Points: -1.42
+Trades: 31
+Win Rate: 48.4% (15/31)
+--------------------------------------------------
+ADOSC Strategy - NKE
+Points: 1.93
+Trades: 31
+Win Rate: 54.8% (17/31)
+--------------------------------------------------
+ADOSC Strategy - ORCL
+Points: 23.38
+Trades: 33
+Win Rate: 69.7% (23/33)
+--------------------------------------------------
+ADOSC Strategy - PEP
+Points: -0.55
+Trades: 30
+Win Rate: 50.0% (15/30)
+--------------------------------------------------
+ADOSC Strategy - PFE
+Points: -19.29
+Trades: 35
+Win Rate: 37.1% (13/35)
+--------------------------------------------------
+ADOSC Strategy - PG
+Points: 11.62
+Trades: 31
+Win Rate: 61.3% (19/31)
+--------------------------------------------------
+ADOSC Strategy - PM
+Points: 8.33
+Trades: 28
+Win Rate: 60.7% (17/28)
+--------------------------------------------------
+ADOSC Strategy - PYPL
+Points: 13.57
+Trades: 37
+Win Rate: 62.2% (23/37)
+--------------------------------------------------
+ADOSC Strategy - QCOM
+Points: 14.26
+Trades: 33
+Win Rate: 66.7% (22/33)
+--------------------------------------------------
+ADOSC Strategy - RTX
+Points: 9.19
+Trades: 25
+Win Rate: 60.0% (15/25)
+--------------------------------------------------
+ADOSC Strategy - SBUX
+Points: 6.87
+Trades: 33
+Win Rate: 54.5% (18/33)
+--------------------------------------------------
+ADOSC Strategy - SCHW
+Points: 8.82
+Trades: 31
+Win Rate: 58.1% (18/31)
+--------------------------------------------------
+ADOSC Strategy - SO
+Points: 11.92
+Trades: 32
+Win Rate: 62.5% (20/32)
+--------------------------------------------------
+ADOSC Strategy - SPG
+Points: -4.08
+Trades: 29
+Win Rate: 48.3% (14/29)
+--------------------------------------------------
+ADOSC Strategy - T
+Points: -0.03
+Trades: 30
+Win Rate: 50.0% (15/30)
+--------------------------------------------------
+ADOSC Strategy - TGT
+Points: 6.72
+Trades: 26
+Win Rate: 61.5% (16/26)
+--------------------------------------------------
+ADOSC Strategy - TMO
+Points: -16.85
+Trades: 32
+Win Rate: 37.5% (12/32)
+--------------------------------------------------
+ADOSC Strategy - TMUS
+Points: 18.96
+Trades: 32
+Win Rate: 68.8% (22/32)
+--------------------------------------------------
+ADOSC Strategy - TSLA
+Points: 17.36
+Trades: 39
+Win Rate: 61.5% (24/39)
+--------------------------------------------------
+ADOSC Strategy - TXN
+Points: 3.46
+Trades: 27
+Win Rate: 59.3% (16/27)
+--------------------------------------------------
+ADOSC Strategy - UNH
+Points: 6.89
+Trades: 31
+Win Rate: 58.1% (18/31)
+--------------------------------------------------
+ADOSC Strategy - UNP
+Points: 18.19
+Trades: 36
+Win Rate: 66.7% (24/36)
+--------------------------------------------------
+ADOSC Strategy - UPS
+Points: -17.32
+Trades: 32
+Win Rate: 37.5% (12/32)
+--------------------------------------------------
+ADOSC Strategy - USB
+Points: 1.67
+Trades: 32
+Win Rate: 53.1% (17/32)
+--------------------------------------------------
+ADOSC Strategy - V
+Points: 8.50
+Trades: 27
+Win Rate: 55.6% (15/27)
+--------------------------------------------------
+ADOSC Strategy - VZ
+Points: 0.20
+Trades: 35
+Win Rate: 48.6% (17/35)
+--------------------------------------------------
+ADOSC Strategy - WBA
+Points: -3.25
+Trades: 30
+Win Rate: 53.3% (16/30)
+--------------------------------------------------
+ADOSC Strategy - WFC
+Points: 1.04
+Trades: 29
+Win Rate: 51.7% (15/29)
+--------------------------------------------------
+ADOSC Strategy - WMT
+Points: 19.19
+Trades: 36
+Win Rate: 63.9% (23/36)
+--------------------------------------------------
+ADOSC Strategy - XOM
+Points: 6.55
+Trades: 30
+Win Rate: 60.0% (18/30)
+--------------------------------------------------
+
+ADOSC Strategy - FINAL SUMMARY
+Total Points: 172.91
+Average Points per Stock: 1.76
+Total Trades: 3057
+Win Rate: 53.7% (1641/3057)
+Average Return: 0.69%
+==================================================
