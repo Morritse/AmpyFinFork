@@ -1,19 +1,17 @@
 {
     "RSI_indicator": {
-        "total_points": -18.28,
-        "average_points": -0.19,
-        "win_rate": 85.29,
-        "total_trades": 68,
-        "average_return": -0.02,
-        "total_minute_decisions": 5501765
+        "total_points": 7.0,
+        "average_points": 0.07,
+        "win_rate": 53.0,
+        "total_trades": 1000,
+        "average_return": 0.5
     },
     "ADOSC_indicator": {
-        "total_points": 842.1,
-        "average_points": 8.59,
-        "win_rate": 76.26,
-        "total_trades": 653,
-        "average_return": 2.25,
-        "total_minute_decisions": 5501765
+        "total_points": 172.91,
+        "average_points": 1.76,
+        "win_rate": 53.7,
+        "total_trades": 3057,
+        "average_return": 0.69
     },
     "DEMA_indicator": {
         "total_points": 948.54,
@@ -23,12 +21,11 @@
         "average_return": 1.91
     },
     "BBANDS_indicator": {
-        "total_points": 0,
-        "average_points": 0.0,
-        "win_rate": 0,
-        "total_trades": 0,
-        "average_return": 0.0,
-        "total_minute_decisions": 5501765
+        "total_points": 20.29,
+        "average_points": 0.21,
+        "win_rate": 58.3,
+        "total_trades": 115,
+        "average_return": -0.21
     },
     "MACD_indicator": {
         "total_points": 522.85,
@@ -52,91 +49,11 @@
         "average_return": 2.77
     },
     "KAMA_indicator": {
-        "total_points": 1043.8,
-        "average_points": 10.65,
-        "win_rate": 87.57,
-        "total_trades": 563,
-        "average_return": 2.69,
-        "total_minute_decisions": 5501765
-    },
-    "MAMA_indicator": {
-        "total_points": 2043.38,
-        "average_points": 20.85,
-        "win_rate": 91.51,
-        "total_trades": 1190,
-        "average_return": 4.52,
-        "total_minute_decisions": 5501765
-    },
-    "MAVP_indicator": {
-        "total_points": 1113.39,
-        "average_points": 11.36,
-        "win_rate": 88.39,
-        "total_trades": 603,
-        "average_return": 2.77,
-        "total_minute_decisions": 5501765
-    },
-    "SMA_indicator": {
-        "total_points": 1113.39,
-        "average_points": 11.36,
-        "win_rate": 88.39,
-        "total_trades": 603,
-        "average_return": 2.77,
-        "total_minute_decisions": 5501765
-    },
-    "HT_TRENDLINE_indicator": {
-        "total_points": 1213.14,
-        "average_points": 12.38,
-        "win_rate": 89.97,
-        "total_trades": 638,
-        "average_return": 2.9,
-        "total_minute_decisions": 5501765
-    },
-    "MIDPOINT_indicator": {
-        "total_points": 1477.87,
-        "average_points": 15.08,
-        "win_rate": 89.55,
-        "total_trades": 842,
-        "average_return": 3.47,
-        "total_minute_decisions": 5501765
-    },
-    "MIDPRICE_indicator": {
-        "total_points": 1451.93,
-        "average_points": 14.82,
-        "win_rate": 89.37,
-        "total_trades": 828,
-        "average_return": 3.45,
-        "total_minute_decisions": 5501765
-    },
-    "SAR_indicator": {
-        "total_points": 107.85,
-        "average_points": 1.1,
-        "win_rate": 11.11,
-        "total_trades": 27,
-        "average_return": 0.86,
-        "total_minute_decisions": 5501765
-    },
-    "SAREXT_indicator": {
-        "total_points": 186.57,
-        "average_points": 1.9,
-        "win_rate": 0,
-        "total_trades": 0,
-        "average_return": 1.25,
-        "total_minute_decisions": 5501765
-    },
-    "T3_indicator": {
-        "total_points": 123.86,
-        "average_points": 1.26,
-        "win_rate": 68.97,
-        "total_trades": 29,
-        "average_return": 0.2,
-        "total_minute_decisions": 5501765
-    },
-    "TEMA_indicator": {
-        "total_points": 1483.22,
-        "average_points": 15.13,
-        "win_rate": 87.44,
-        "total_trades": 860,
-        "average_return": 3.02,
-        "total_minute_decisions": 5501765
+        "total_points": 33.36,
+        "average_points": 11.12,
+        "win_rate": 90.47619047619048,
+        "total_trades": 21,
+        "average_return": 2.175811400000005,
+        "total_minute_decisions": 151950
     }
 }
