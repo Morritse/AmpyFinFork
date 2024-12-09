@@ -37,13 +37,13 @@ Managing multiple algorithms is simplified with AmpyFin’s dynamic ranking syst
 
 #### 🏆 Ranking System
 
-Each algorithm starts with a base score of 50,000. The system evaluates their performance and assigns a weight based on the following function:
+Each strategy starts with a base score of 50,000. The system evaluates their performance and assigns a weight based on the following function:
 
 $$
-\left( \frac{e^e}{e^2 - 1} \right)^{2i}
+\left( \frac{e^e}{e^2} - 1 \right)^{2i}
 $$
 
-Where \(i\) is the inverse of the algorithm’s ranking.
+Where \(i\) is the strategy's rank. Please keep in mind that the strategy's rank 
 
 #### ⏳ Time Delta Coefficient
 
@@ -114,7 +114,9 @@ pip install -r requirements.txt
 ```
 
 - We have recently migrated to using Ta-Lib for trading. Please follow the installation instructions here: 
+
 👉 [Ta-Lib Python Original](https://github.com/TA-Lib/ta-lib-python)
+
 👉 [Ta-Lib Python Easy Installation](https://github.com/cgohlke/talib-build/releases)
 
 ### 3️⃣ Configuration

@@ -46,7 +46,7 @@ import yfinance as yf
 import logging
 from collections import Counter
 from trading_client import market_status
-from helper_files.client_helper import strategies, get_latest_price, get_ndaq_tickers
+from helper_files.client_helper import strategies, get_latest_price, get_ndaq_tickers, dynamic_period_selector
 import time
 from datetime import datetime 
 import heapq 
@@ -75,32 +75,31 @@ def process_ticker(ticker, mongo_client):
             time.sleep(10)
       while historical_data is None:
          try:
+            
             historical_data = get_data(ticker)
          except Exception as fetch_error:
             logging.warning(f"Error fetching historical data for {ticker}. Retrying... {fetch_error}")
             time.sleep(10)
 
       for strategy in strategies:
-         try:  
             
-            db = mongo_client.trading_simulator  
-            holdings_collection = db.algorithm_holdings
-            print(f"Processing {strategy.__name__} for {ticker}")
-            strategy_doc = holdings_collection.find_one({"strategy": strategy.__name__})
-            if not strategy_doc:
-               logging.warning(f"Strategy {strategy.__name__} not found in database. Skipping.")
-               continue
+         db = mongo_client.trading_simulator  
+         holdings_collection = db.algorithm_holdings
+         print(f"Processing {strategy.__name__} for {ticker}")
+         strategy_doc = holdings_collection.find_one({"strategy": strategy.__name__})
+         if not strategy_doc:
+            logging.warning(f"Strategy {strategy.__name__} not found in database. Skipping.")
+            continue
 
-            account_cash = strategy_doc["amount_cash"]
-            total_portfolio_value = strategy_doc["portfolio_value"]
+         account_cash = strategy_doc["amount_cash"]
+         total_portfolio_value = strategy_doc["portfolio_value"]
 
-            
-            portfolio_qty = strategy_doc["holdings"].get(ticker, {}).get("quantity", 0)
+         
+         portfolio_qty = strategy_doc["holdings"].get(ticker, {}).get("quantity", 0)
 
-            simulate_trade(ticker, strategy, historical_data, current_price,
-                           account_cash, portfolio_qty, total_portfolio_value, mongo_client)
-         except Exception as e:
-               logging.error(f"Error processing {ticker} for {strategy.__name__}: {e}")
+         simulate_trade(ticker, strategy, historical_data, current_price,
+                        account_cash, portfolio_qty, total_portfolio_value, mongo_client)
+         
       print(f"{ticker} processing completed.")
    except Exception as e:
       logging.error(f"Error in thread for {ticker}: {e}")

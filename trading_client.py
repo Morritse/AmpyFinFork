@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 from pymongo import MongoClient
 import time
 from datetime import datetime, timedelta
-from helper_files.client_helper import place_order, get_ndaq_tickers, market_status, strategies, get_latest_price 
+from helper_files.client_helper import place_order, get_ndaq_tickers, market_status, strategies, get_latest_price, dynamic_period_selector
 from alpaca.trading.client import TradingClient
 from alpaca.data.timeframe import TimeFrame, TimeFrameUnit
 from alpaca.data.historical.stock import StockHistoricalDataClient
@@ -114,6 +114,8 @@ def main():
                     early_hour_first_iteration = False
                     post_hour_first_iteration = True
             account = trading_client.get_account()
+            qqq_latest = get_latest_price('QQQ')
+            spy_latest = get_latest_price('SPY')
             
             buy_heap = []
             for ticker in ndaq_tickers:
@@ -128,23 +130,33 @@ def main():
                     cash_to_portfolio_ratio = buying_power / portfolio_value
                     mongo_client = MongoClient(mongo_url)
                     trades_db = mongo_client.trades
-                    portfolio_collection = trades_db.portfolio_value
+                    portfolio_collection = trades_db.portfolio_values
                     
                     """
                     we update instead of insert
                     """
-                    portfolio_collection.update_one({"name" : "portfolio_percentage"}, {"$set": {"portfolio_percentage": (portfolio_value-50000)/50000}})
-                    portfolio_collection.update_one({"name" : "ndaq_percentage"}, {"$set": {"portfolio_percentage": (get_latest_price('QQQ')-503.17)/503.17}})
-                    portfolio_collection.update_one({"name" : "spy_percentage"}, {"$set": {"portfolio_percentage": (get_latest_price('SPY')-590.50)/590.50}})
+                    
+                    portfolio_collection.update_one({"name" : "portfolio_percentage"}, {"$set": {"portfolio_value": (portfolio_value-50000)/50000}})
+                    portfolio_collection.update_one({"name" : "ndaq_percentage"}, {"$set": {"portfolio_value": (qqq_latest-503.17)/503.17}})
+                    portfolio_collection.update_one({"name" : "spy_percentage"}, {"$set": {"portfolio_value": (spy_latest-590.50)/590.50}})
+                    
+                    historical_data = None
+                    while historical_data is None:
+                        try:
+                            
+
+                            historical_data = get_data(ticker)
+                        except:
+                            print(f"Error fetching data for {ticker}. Retrying...")
                     
                     
-                    historical_data = get_data(ticker)
                     current_price = None
                     while current_price is None:
                         try:
                             current_price = get_latest_price(ticker)
                         except:
                             print(f"Error fetching price for {ticker}. Retrying...")
+                            time.sleep(10)
                     print(f"Current price of {ticker}: {current_price}")
 
                     asset_info = asset_collection.find_one({'symbol': ticker})
@@ -170,7 +182,7 @@ def main():
                     
                     if decision == "buy" and float(account.cash) > 15000 and (((quantity + portfolio_qty) * current_price) / portfolio_value) < 0.1:
                         
-                        heapq.heappush(buy_heap, (-(buy_weight-(sell_weight + hold_weight)), quantity, ticker))
+                        heapq.heappush(buy_heap, (-(buy_weight-(sell_weight + (hold_weight * 0.5))), quantity, ticker))
                     elif decision == "sell" and portfolio_qty > 0:
                         print(f"Executing SELL order for {ticker}")
                         
@@ -190,9 +202,10 @@ def main():
             while buy_heap and float(account.cash) > 15000:  
                 try:
                     buy_coeff, quantity, ticker = heapq.heappop(buy_heap)
-                    print(f"buy_coeff: {buy_coeff}, quantity: {quantity}, ticker: {ticker}")
+                    print(f"Executing BUY order for {ticker}")
                     
                     order = place_order(trading_client, ticker, OrderSide.BUY, qty=quantity, mongo_url=mongo_url)  # Place order using helper
+                    
                     logging.info(f"Executed BUY order for {ticker}: {order}")
                     
                     trading_client = TradingClient(API_KEY, API_SECRET)
