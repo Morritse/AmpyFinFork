@@ -50,8 +50,8 @@ from helper_files.client_helper import strategies, get_latest_price, get_ndaq_ti
 import time
 from datetime import datetime 
 import heapq 
-
-
+import certifi
+ca = certifi.where()
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -247,12 +247,12 @@ def simulate_trade(ticker, strategy, historical_data, current_price, account_cas
    print(f"Action: {action} | Ticker: {ticker} | Quantity: {quantity} | Price: {current_price}")
    # Close the MongoDB connection
 
-def update_portfolio_values():
+def update_portfolio_values(client):
    """
    still need to implement.
    we go through each strategy and update portfolio value buy cash + summation(holding * current price)
    """
-   client = MongoClient(mongo_url)  
+   
    db = client.trading_simulator  
    holdings_collection = db.algorithm_holdings
    # Update portfolio values
@@ -281,11 +281,11 @@ def update_portfolio_values():
    # Update MongoDB with the modified strategy documents
    client.close()
 
-def update_ranks():
+def update_ranks(client):
    """"
    based on portfolio values, rank the strategies to use for actual trading_simulator
    """
-   client = MongoClient(mongo_url)
+   
    db = client.trading_simulator
    points_collection = db.points_tally
    rank_collection = db.rank
@@ -306,7 +306,7 @@ def update_ranks():
       if strategy_name == "test" or strategy_name == "test_strategy":
          continue
 
-      heapq.heappush(q, (points_collection.find_one({"strategy": strategy_name})["total_points"]/10 + ((strategy_doc["portfolio_value"] / 50000) * 2), strategy_doc["successful_trades"] - strategy_doc["failed_trades"], strategy_doc["amount_cash"], strategy_doc["strategy"]))
+      heapq.heappush(q, (points_collection.find_one({"strategy": strategy_name})["total_points"]/10 + (strategy_doc["portfolio_value"]), strategy_doc["successful_trades"] - strategy_doc["failed_trades"], strategy_doc["amount_cash"], strategy_doc["strategy"]))
    rank = 1
    while q:
       
@@ -325,7 +325,7 @@ def main():
    
    
    while True: 
-      mongo_client = MongoClient(mongo_url)
+      mongo_client = MongoClient(mongo_url, tlsCAFile=ca)
       status = mongo_client.market_data.market_status.find_one({})["market_status"]
       
       
@@ -346,7 +346,8 @@ def main():
             thread.join()
 
          
-         update_portfolio_values()
+         
+
          logging.info("Finished processing all strategies. Waiting for 60 seconds.")
          time.sleep(60)  
       
@@ -366,13 +367,13 @@ def main():
             logging.info("Market is closed. Performing post-market analysis.") 
             post_market_hour_first_iteration = False
             #increment time_Delta in database by 0.01
-            mongo_client = MongoClient(mongo_url)
+            
             mongo_client.trading_simulator.time_delta.update_one({}, {"$inc": {"time_delta": 0.01}})
-            mongo_client.close()
+            
             
             #Update ranks
-            update_portfolio_values()
-            update_ranks()
+            update_portfolio_values(mongo_client)
+            update_ranks(mongo_client)
         logging.info("Market is closed. Waiting for 60 seconds.")
         time.sleep(60)  
       else:  
