@@ -245,75 +245,110 @@ def simulate_trade(ticker, strategy, historical_data, current_price, account_cas
    else:
       logging.info(f"Action: {action} | Ticker: {ticker} | Quantity: {quantity} | Price: {current_price}")
    print(f"Action: {action} | Ticker: {ticker} | Quantity: {quantity} | Price: {current_price}")
-   # Close the MongoDB connection
 
 def update_portfolio_values(client):
    """
-   still need to implement.
-   we go through each strategy and update portfolio value buy cash + summation(holding * current price)
+   Update portfolio values for each strategy by calculating cash + sum(holding * current price)
    """
-   
-   db = client.trading_simulator  
-   holdings_collection = db.algorithm_holdings
-   # Update portfolio values
-   for strategy_doc in holdings_collection.find({}):
-      # Calculate the portfolio value for the strategy
-      portfolio_value = strategy_doc["amount_cash"]
+   try:
+      db = client.trading_simulator  
+      holdings_collection = db.algorithm_holdings
       
-      for ticker, holding in strategy_doc["holdings"].items():
-          
-          # Get the current price of the ticker from the Polygon API
-          current_price = None
-          while current_price is None:
-            try:
-               current_price = get_latest_price(ticker)
-            except:
-               print(f"Error fetching price for {ticker}. Retrying...")
-          print(f"Current price of {ticker}: {current_price}")
-          # Calculate the value of the holding
-          holding_value = holding["quantity"] * current_price
-          # Add the holding value to the portfolio value
-          portfolio_value += holding_value
-          
-      # Update the portfolio value in the strategy document
-      holdings_collection.update_one({"strategy": strategy_doc["strategy"]}, {"$set": {"portfolio_value": portfolio_value}}, upsert=True)
-
-   # Update MongoDB with the modified strategy documents
-   client.close()
+      # Get all strategy documents at once to avoid cursor timeout
+      strategy_docs = list(holdings_collection.find({}))
+      
+      for strategy_doc in strategy_docs:
+         try:
+            # Calculate the portfolio value for the strategy
+            portfolio_value = strategy_doc["amount_cash"]
+            
+            for ticker, holding in strategy_doc["holdings"].items():
+               try:
+                  # Get the current price of the ticker
+                  current_price = None
+                  retries = 3
+                  while current_price is None and retries > 0:
+                     try:
+                        current_price = get_latest_price(ticker)
+                     except Exception as e:
+                        logging.error(f"Error fetching price for {ticker}: {e}")
+                        retries -= 1
+                        if retries > 0:
+                           time.sleep(5)
+                  
+                  if current_price is not None:
+                     logging.info(f"Current price of {ticker}: {current_price}")
+                     # Calculate the value of the holding
+                     holding_value = holding["quantity"] * current_price
+                     # Add the holding value to the portfolio value
+                     portfolio_value += holding_value
+                  else:
+                     logging.error(f"Failed to get price for {ticker} after 3 attempts")
+               except Exception as e:
+                  logging.error(f"Error processing holding for {ticker}: {e}")
+                  continue
+            
+            # Update the portfolio value in the strategy document
+            holdings_collection.update_one(
+               {"strategy": strategy_doc["strategy"]}, 
+               {"$set": {"portfolio_value": portfolio_value}},
+               upsert=True
+            )
+         except Exception as e:
+            logging.error(f"Error processing strategy {strategy_doc.get('strategy', 'unknown')}: {e}")
+            continue
+            
+   except Exception as e:
+      logging.error(f"Error in update_portfolio_values: {e}")
+   finally:
+      # Don't close the client here as it's needed by the calling function
+      pass
 
 def update_ranks(client):
-   """"
-   based on portfolio values, rank the strategies to use for actual trading_simulator
    """
-   
-   db = client.trading_simulator
-   points_collection = db.points_tally
-   rank_collection = db.rank
-   algo_holdings = db.algorithm_holdings
+   Rank strategies based on portfolio values and points for actual trading
    """
-   delete all documents in rank collection first
-   """
-   rank_collection.delete_many({})
-   """
-   now update rank based on successful_trades - failed
-   """
-   q = []
-   for strategy_doc in algo_holdings.find({}):
-      """
-      based on (points_tally (less points pops first), failed-successful(more negtive pops first), portfolio value (less value pops first), and then strategy_name), we add to heapq.
-      """
-      strategy_name = strategy_doc["strategy"]
-      if strategy_name == "test" or strategy_name == "test_strategy":
-         continue
-
-      heapq.heappush(q, (points_collection.find_one({"strategy": strategy_name})["total_points"]/10 + (strategy_doc["portfolio_value"]), strategy_doc["successful_trades"] - strategy_doc["failed_trades"], strategy_doc["amount_cash"], strategy_doc["strategy"]))
-   rank = 1
-   while q:
+   try:
+      db = client.trading_simulator
+      points_collection = db.points_tally
+      rank_collection = db.rank
+      algo_holdings = db.algorithm_holdings
       
-      _, _, _, strategy_name = heapq.heappop(q)
-      rank_collection.insert_one({"strategy": strategy_name, "rank": rank})
-      rank+=1
-   client.close()
+      # Clear existing ranks
+      rank_collection.delete_many({})
+      
+      # Build ranking queue
+      q = []
+      strategy_docs = list(algo_holdings.find({}))
+      for strategy_doc in strategy_docs:
+         strategy_name = strategy_doc["strategy"]
+         if strategy_name in ["test", "test_strategy"]:
+            continue
+            
+         points_doc = points_collection.find_one({"strategy": strategy_name})
+         if points_doc:
+            heapq.heappush(q, (
+               points_doc["total_points"]/10 + (strategy_doc["portfolio_value"]),
+               strategy_doc["successful_trades"] - strategy_doc["failed_trades"],
+               strategy_doc["amount_cash"],
+               strategy_name
+            ))
+      
+      # Update rankings
+      rank = 1
+      while q:
+         _, _, _, strategy_name = heapq.heappop(q)
+         rank_collection.insert_one({
+            "strategy": strategy_name,
+            "rank": rank
+         })
+         rank += 1
+         
+   except Exception as e:
+      logging.error(f"Error in update_ranks: {e}")
+   finally:
+      # Don't close the client here as it's needed by the calling function
+      pass
 
 def main():  
    """  
@@ -323,64 +358,67 @@ def main():
    early_hour_first_iteration = True
    post_market_hour_first_iteration = True
    
-   
    while True: 
-      mongo_client = MongoClient(mongo_url, tlsCAFile=ca)
-      status = mongo_client.market_data.market_status.find_one({})["market_status"]
-      
-      
-      if status == "open":  
-         logging.info("Market is open. Processing strategies.")  
-         if not ndaq_tickers:
-            ndaq_tickers = get_ndaq_tickers(mongo_url, FINANCIAL_PREP_API_KEY)
-
-         threads = []
-
-         for ticker in ndaq_tickers:
-            thread = threading.Thread(target=process_ticker, args=(ticker, mongo_client))
-            threads.append(thread)
-            thread.start()
-
-         # Wait for all threads to complete
-         for thread in threads:
-            thread.join()
-
+      try:
+         mongo_client = MongoClient(mongo_url, tlsCAFile=ca)
+         status = mongo_client.market_data.market_status.find_one({})["market_status"]
          
-         
+         if status == "open":  
+            logging.info("Market is open. Processing strategies.")  
+            if not ndaq_tickers:
+               ndaq_tickers = get_ndaq_tickers(mongo_url, FINANCIAL_PREP_API_KEY)
 
-         logging.info("Finished processing all strategies. Waiting for 60 seconds.")
-         time.sleep(60)  
-      
-      elif status == "early_hours":  
+            threads = []
+            for ticker in ndaq_tickers:
+               thread = threading.Thread(target=process_ticker, args=(ticker, mongo_client))
+               threads.append(thread)
+               thread.start()
+
+            # Wait for all threads to complete
+            for thread in threads:
+               thread.join()
+
+            logging.info("Finished processing all strategies. Waiting for 60 seconds.")
+            time.sleep(60)  
+         
+         elif status == "early_hours":  
             if early_hour_first_iteration:  
-               
                ndaq_tickers = get_ndaq_tickers(mongo_url, FINANCIAL_PREP_API_KEY)  
                early_hour_first_iteration = False  
                post_market_hour_first_iteration = True
             logging.info("Market is in early hours. Waiting for 60 seconds.")  
             time.sleep(60)  
-  
-      elif status == "closed":  
-         
-        early_hour_first_iteration = True
-        if post_market_hour_first_iteration:
-            logging.info("Market is closed. Performing post-market analysis.") 
-            post_market_hour_first_iteration = False
-            #increment time_Delta in database by 0.01
-            
-            mongo_client.trading_simulator.time_delta.update_one({}, {"$inc": {"time_delta": 0.01}})
-            
-            
-            #Update ranks
-            update_portfolio_values(mongo_client)
-            update_ranks(mongo_client)
-        logging.info("Market is closed. Waiting for 60 seconds.")
-        time.sleep(60)  
-      else:  
-        logging.error("An error occurred while checking market status.")  
-        time.sleep(60)
-      mongo_client.close()
    
-  
+         elif status == "closed":  
+            early_hour_first_iteration = True
+            if post_market_hour_first_iteration:
+               logging.info("Market is closed. Performing post-market analysis.") 
+               post_market_hour_first_iteration = False
+               
+               # Increment time_delta
+               mongo_client.trading_simulator.time_delta.update_one(
+                  {}, 
+                  {"$inc": {"time_delta": 0.01}}
+               )
+               
+               # Update portfolio values and ranks
+               update_portfolio_values(mongo_client)
+               update_ranks(mongo_client)
+               
+            logging.info("Market is closed. Waiting for 60 seconds.")
+            time.sleep(60)  
+         else:  
+            logging.error("An error occurred while checking market status.")  
+            time.sleep(60)
+            
+      except Exception as e:
+         logging.error(f"Error in main loop: {e}")
+         time.sleep(60)
+      finally:
+         try:
+            mongo_client.close()
+         except Exception as e:
+            logging.error(f"Error closing MongoDB connection: {e}")
+   
 if __name__ == "__main__":  
    main()
