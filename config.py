@@ -11,8 +11,8 @@ MONGO_DB_PASS = "hqRc4RwpL49F6yij"
 mongo_url = f"mongodb+srv://{MONGO_DB_USER}:{MONGO_DB_PASS}@cluster0.tlesn.mongodb.net/?retryWrites=true&w=majority"
 
 # Alpaca API credentials (paper trading)
-API_KEY = "PKNTZ0OC8WFDUG2BIP8U"
-API_SECRET = "xeQ5ehe0CTmi9HVcCV1NKKRj9gcdJytRft8L2ewF"
+API_KEY = "PK6L3PQE37992N4LPGSA"
+API_SECRET = "SyRxv7V1iL3AJCLf4IoaaTeKMnFP66NTuaJIBKcc"
 
 # Use paper trading URL for Alpaca
 BASE_URL = "https://paper-api.alpaca.markets"
